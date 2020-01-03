@@ -70,60 +70,8 @@ void signBMP(FILE* inputFile, FILE* signedFile, BMPImage* image, Options* option
             }
             j++;
         }else{
-            // if (i == 482000)
-            //    break;
             ch=fgetc(inputFile);
             fputc(ch, signedFile);    
-            i++;
-        }
-    }
-}
-
-
-void signOUT(FILE* inputFile, BMPImage* image, Options* options, char* encodedText, int positionOffset){
-	rewind(inputFile);
-    char ch;
-    int count=0;
-    for (int i=0, j=0; i<image->header.fileSize;)
-    {
-        if (i>=positionOffset && encodedText[j])
-        {
-            unsigned char* backgroundColor=(char*)malloc(4*sizeof(char));
-            fread(&backgroundColor[0], getBytePerPixel(&image->header), 1, inputFile);
-            if(encodedText[j] == '.'){
-                fwrite(&options->color[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                i+=getBytePerPixel(&image->header)*2;
-                count=getBytePerPixel(&image->header)*1;
-                fseek( inputFile, count, SEEK_CUR );
-            }else if(encodedText[j] == '-'){
-                fwrite(&options->color[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&options->color[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&options->color[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                i+=getBytePerPixel(&image->header)*4;
-                count=getBytePerPixel(&image->header)*3;
-                fseek( inputFile, count, SEEK_CUR );
-            }else if(encodedText[j] == ' ' && encodedText[j+1] != ' '){
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                i+=getBytePerPixel(&image->header)*2;
-                count=getBytePerPixel(&image->header)*1;
-                fseek( inputFile, count, SEEK_CUR );
-            }else if(encodedText[j] == ' ' && encodedText[j+1] == ' '){
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                fwrite(&backgroundColor[0], getBytePerPixel(&image->header), 1, stdout);
-                i+=getBytePerPixel(&image->header)*4;
-                count=getBytePerPixel(&image->header)*3;
-                fseek( inputFile, count, SEEK_CUR );
-                j++;
-            }
-            j++;
-        }else{
-            ch=fgetc(inputFile);
-            fputc(ch, stdout);    
             i++;
         }
     }

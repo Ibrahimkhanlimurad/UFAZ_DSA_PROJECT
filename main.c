@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
     BMPImage* image = readBmp(inputFile);
     int positionOffset=getCurrentPosition(options->position[0], options->position[1], &image->header);
     convertColorToLittleEndian(options, image);
-    // printAll(options, image, textToEncode, encodedText, positionOffset);
-    if(_check(options->outputFile[0]=='\0')){
+    printAll(options, image, textToEncode, encodedText, positionOffset);
+    if(_check(options->outputFile[0]!='\0')){
         FILE* signedFile = _openFile(options->outputFile, "wb+", "ERROR: Could not open output file...");
         signBMP(inputFile, signedFile, image, options, encodedText, positionOffset);
-    }else{
-        signOUT(inputFile, image, options, encodedText, positionOffset);
-}
+    }else
+        signBMP(inputFile, stdout, image, options, encodedText, positionOffset);
+
 	return 0;
 }

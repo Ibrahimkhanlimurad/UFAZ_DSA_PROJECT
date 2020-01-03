@@ -38,7 +38,7 @@ Options* getOptions(int argc, char *argv[]){
     else{
         if (argv[1] && (strcmp(argv[1], "-h")==0 || strcmp(argv[1], "-help")==0)) optind--;
         else{
-            fprintf(stderr, "For usage information: ./%s -h/-help", argv[0]);
+            fprintf(stderr, "For usage information: ./%s -h/-help\n", argv[0]);
             exit(_USER_ERROR);
         }
     }
