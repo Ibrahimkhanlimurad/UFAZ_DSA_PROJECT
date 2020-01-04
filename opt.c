@@ -70,9 +70,13 @@ Options* getOptions(int argc, char *argv[]){
         if((ch = getopt_long_only(argc, argv, "ht:dp:o:", longopts, NULL)) != -1){
             switch (ch) {
                 case 'h':
-                    fprintf(stderr, "\nUsage: ./%s [filename][options]\nOptions:\n\t\t[filename]\t\t-\t(obligatory)\n\t\t[-text <sign-text>]\t-\t(optional)\n\t\t"
-                        "[-date]\t\t\t-\t(optional)\n\t\t[-color <hex-color>]\t-\t(optional)\n\t\t[-pos <x, y>]\t\t-\t(optional)\n\t\t[-o <output-filename>]\t-\t(mandatory)"
-                        "\n\n\t\t[-h or -help]\t\t-\t(Print usage)", argv[0]);
+                    fprintf(stderr, "\n\n************************************\nInfo: Simple watermarking of BMP images\n"
+                        "\nUsage: ./%s [filename][options]\n"
+                        "\nExample: ./program example.bmp -text \"Hello\" -date -color FFFFFE -pos 10,20 -o modimage.bmp\n"
+                        "\nOptions:\n\t\t[filename]\t\t-\t(obligatory)\n\t\t[-text <sign-text>]\t-\t(optional-default: no text)\n\t\t"
+                        "[-date]\t\t\t-\t(optional-default: no date)\n\t\t[-color <hex-color>]\t-\t(optional-default: #000000(black oclor))\n\t\t"
+                        "[-pos <x, y>]\t\t-\t(optional-default: (0,0))\n\t\t[-o <output-filename>]\t-\t(mandatory)"
+                        "\n\n\t\t[-h or -help]\t\t-\t(Print usage)\n", argv[0]);
                     exit(_USER_ERROR);
                 case 't':
                     for(int i = 0; optarg[i]; i++){

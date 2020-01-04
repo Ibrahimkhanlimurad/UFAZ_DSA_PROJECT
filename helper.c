@@ -10,14 +10,38 @@
 #include "writebmp.h"
 
 void _softError(char* message, int code){
+    int err = open("../logs/error.log", O_RDWR|O_CREAT|O_APPEND, 0600);
+    if (-1 == err) perror("opening cerr.log");
+    int save_err = dup(fileno(stderr));
+    if (-1 == dup2(err, fileno(stderr))) perror("cannot redirect stderr");
+
+    fprintf(stderr, "\n-------------------------------------------------------------------------------------------\n");
+    fprintf(stderr, "%s\n", getDate());
     fprintf(stderr, "\n\n%s\n", message);
+
+    fflush(stderr); close(err);
+    dup2(save_err, fileno(stderr));
+    close(save_err);
+
     exit(code);
 }
 
 void _handleError(char* errorMessage, int code, FILE *fp, BMPImage* image)
 {
+    int err = open("../logs/error.log", O_RDWR|O_CREAT|O_APPEND, 0600);
+    if (-1 == err) perror("opening error.log");
+    int save_err = dup(fileno(stderr));
+    if (-1 == dup2(err, fileno(stderr))) perror("cannot redirect stderr");
+
+    fprintf(stderr, "\n-------------------------------------------------------------------------------------------\n");
+    fprintf(stderr, "%s\n", getDate());
     fprintf(stderr, "\n\nERROR: %s\n", errorMessage);
     _cleanUp(fp, image);
+
+    fflush(stderr); close(err);
+    dup2(save_err, fileno(stderr));
+    close(save_err);
+
     exit(code);
 }
 
@@ -64,20 +88,28 @@ void convertColorToLittleEndian(Options* options, BMPImage* image){
     unsigned char t = options->color[2];
     unsigned char fo = options->color[3];
 
-    if(getBytePerPixel(&image->header) == 3){
-        options->color[0] = t;
-        options->color[1] = s;
-        options->color[2] = f;
-    }else if(getBytePerPixel(&image->header) == 4){
+    if(getBytePerPixel(&image->header) == 4){
         options->color[0] = fo;
         options->color[1] = t;
         options->color[2] = s;  
         options->color[3] = f;  
+    }else if(getBytePerPixel(&image->header) == 3){
+        options->color[0] = t;
+        options->color[1] = s;
+        options->color[2] = f;
+    }else if(getBytePerPixel(&image->header) == 2){
+        options->color[0] = t;
+        options->color[1] = s;
+        options->color[2] = 0;
+    }else if(getBytePerPixel(&image->header) == 1){
+        options->color[0] = t;
+        options->color[1] = 0;
+        options->color[2] = 0;
     }
 }
 
 void printAll(Options* options, BMPImage* image, char* textToEncode, char* encodedText, int positionOffset){
-    printf("%\n-------------------------------------------------------------------------------------------\n");
+    printf("\n-------------------------------------------------------------------------------------------\n");
     printf("%s\n", getDate());
     printOptions(options);
     printBmp(image);
@@ -102,9 +134,9 @@ void printAll(Options* options, BMPImage* image, char* textToEncode, char* encod
 
 void logAll(Options* options, BMPImage* image, char* textToEncode, char* encodedText, int positionOffset){
     int out = open("../logs/output.log", O_RDWR|O_CREAT|O_APPEND, 0600);
-    if (-1 == out) perror("opening cout.log"); 
+    if (-1 == out) perror("opening output.log"); 
     int err = open("../logs/error.log", O_RDWR|O_CREAT|O_APPEND, 0600);
-    if (-1 == err) perror("opening cerr.log");
+    if (-1 == err) perror("opening error.log");
 
     int save_out = dup(fileno(stdout));
     int save_err = dup(fileno(stderr));
