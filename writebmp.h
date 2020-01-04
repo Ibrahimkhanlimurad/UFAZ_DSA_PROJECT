@@ -7,6 +7,7 @@ int currentPosition(int counter, unsigned x, unsigned y, BMPHeader* header);
 int getCurrentPosition(unsigned x, unsigned y, BMPHeader* header);
 int getPadding(BMPHeader* header);
 int getBytePerPixel(BMPHeader* header);
-void signBMP(FILE* inputFile, FILE* signedFile, BMPImage* image, Options* options, char* encodedText, int positionOffset);
+void signBMP(FILE* inputFile, BMPImage* image, Options* options, char* encodedText, int positionOffset, char* newData);
+void signOUT();
 
 #endif

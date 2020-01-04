@@ -5,7 +5,7 @@
 #include "readbmp.h"
 
 BMPImage* readBmp(FILE* fp){
-    BMPImage* image = malloc(sizeof(*image));
+    BMPImage* image = calloc(1, sizeof(*image));
     if(!_check(image != NULL))
         _handleError("Not enough memory...", _MEMORY_ERROR, fp, image);
 

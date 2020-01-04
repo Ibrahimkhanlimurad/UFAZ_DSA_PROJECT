@@ -59,7 +59,7 @@ char* morseEncodeChar(int chNum){
         {" "} //55-
     };
 
-    char* morseText = (char*)malloc(10); 
+    char* morseText = (char*)calloc(1, 10); 
     strcpy(morseText, morseDictionary[chNum]);
     return morseText;
 }
@@ -74,10 +74,10 @@ char* morseGenerator(char* str){
         '"', '=', '+', '*', '@', '&', ' '
      };
 
-    char* encodedText = (char*)malloc(2000); 
+    char* encodedText = (char*)calloc(1, 2000); 
     encodedText[0]='\0';
 
-     for(i=0; str[i]!='\0'; i++){
+    for(i=0; str[i]!='\0'; i++){
         for(j=0; j<55; j++){
             if(str[i] == texto[j])
                 strcat(encodedText, morseEncodeChar(j));

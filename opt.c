@@ -7,14 +7,14 @@
 #include "opt.h"
 
 Options* newOptions(char* inputFile, char* outputFile, char* text, unsigned xPos, unsigned yPos, uint8_t hasDate, unsigned char* color){
-    Options* newOptions = (Options*)malloc(sizeof(Options));
+    Options* newOptions = (Options*)calloc(1, sizeof(Options));
     newOptions->inputFile = inputFile;
     newOptions->outputFile = outputFile;
     newOptions->text=text;
     newOptions->position[0]=xPos;
     newOptions->position[1]=yPos;
     newOptions->hasDate=hasDate;
-    strncpy(newOptions->color, color, 4);
+    memcpy(newOptions->color, color, 4);
 
     return newOptions;
 }
@@ -31,7 +31,7 @@ void printOptions(Options* options){
 }
 
 Options* getOptions(int argc, char *argv[]){
-    char* inputFile=(char*)malloc(100*sizeof(char));
+    char* inputFile=(char*)calloc(1, 100*sizeof(char));
     strcpy(inputFile, "../input/");
     if(argc >= 2 && argv[1] && strcat(inputFile, argv[1]) && strcmp(argv[1], "-h")!=0 && strcmp(argv[1], "-help")!=0)
         _openFile(inputFile, "rb+", "ERROR: Could not open input file, please check if you have input file on input folder...");
@@ -53,11 +53,11 @@ Options* getOptions(int argc, char *argv[]){
         { 0,         0,           0, 0 }
     };
 
-    char* outputFile=(char*)malloc(100);
+    char* outputFile=(char*)calloc(1, 100);
     outputFile[0] = '\0';
-    char* text=(char*)malloc(200);
+    char* text=(char*)calloc(1, 200);
     text[0] = '\0';
-    unsigned char* color=(char*)malloc(4);
+    unsigned char* color=(char*)calloc(1, 4);
     color[0] = '\0';
     unsigned xPos=0;
     unsigned yPos=0;
@@ -113,9 +113,9 @@ Options* getOptions(int argc, char *argv[]){
         }
     }
 
-    
-    if(_check(outputFile[0]=='\0')){
-        char* temp = (char*)malloc(200);
+
+    if(_check(outputFile[0]!='\0')){
+        char* temp = (char*)calloc(1, 200);
         strcpy(temp, "../output/");
         strcat(temp, outputFile);
         strcpy(outputFile, temp);
